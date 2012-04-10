@@ -1,0 +1,6 @@
+
+    [couchdbkit.consumers]
+    sync=couchdbkit.consumer.sync:SyncConsumer
+    eventlet=couchdbkit.consumer.ceventlet:EventletConsumer
+    gevent=couchdbkit.consumer.cgevent:GeventConsumer
+    

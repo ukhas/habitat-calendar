@@ -1,0 +1,10 @@
+Flask==0.8
+Jinja2==2.6
+Werkzeug==0.8.3
+couchdbkit==0.6.1
+http-parser==0.7.5
+icalendar==3.0.1b2
+pytz==2012b
+restkit==4.1.2
+socketpool==0.3.0
+wsgiref==0.1.2
