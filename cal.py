@@ -5,10 +5,6 @@ from flask import Flask, Response
 app = Flask(__name__)
 
 @app.route("/")
-def index():
-    return "<!DOCTYPE html>Try <a href=\"/calendar\">/calendar</a>!"
-
-@app.route("/calendar")
 def calendar():
     c = icalendar.Calendar()
     db = couchdbkit.Server("http://habitat.habhub.org")['habitat']
