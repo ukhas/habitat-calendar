@@ -1,30 +1,30 @@
 import couchdbkit
-import time
 import datetime
-import icalendar as ical
-from flask import Flask
+import icalendar
+from flask import Flask, Response
 app = Flask(__name__)
 
 @app.route("/")
-def generate_calendar():
-    c = ical.Calendar()
+def index():
+    return "<!DOCTYPE html>Try <a href=\"/calendar\">/calendar</a>!"
 
+@app.route("/calendar")
+def calendar():
+    c = icalendar.Calendar()
     db = couchdbkit.Server("http://habitat.habhub.org")['habitat']
-    t = int(time.time())
-    flights = db.view("calendar/flights", startkey=t, stale='update_after')
+    flights = db.view("calendar/flights", stale='update_after')
 
-    for row in flights:
-        e = ical.Event()
-        e.add('summary', row['value']['name'] + " Launch")
-        e.add('dtstart',
-              datetime.datetime.fromtimestamp(row['value']['launch']['time']))
-        e.add('dtend',
-              datetime.datetime.fromtimestamp(row['value']['launch']['time']))
+    for flight in flights:
+        launchtime = flight['key']
+        e = icalendar.Event()
+        e.add('summary', flight['value']['name'] + " Launch")
+        e.add('dtstart', datetime.datetime.fromtimestamp(launchtime))
+        e.add('dtend', datetime.datetime.fromtimestamp(launchtime + 4*3600))
         e.add('dtstamp', datetime.datetime.utcnow())
-        e['uid'] = row['id']
+        e['uid'] = flight['id']
         c.add_component(e)
 
-    return c.as_string()
+    return Response(c.as_string(), mimetype='text/calendar')
 
 if __name__ == "__main__":
     app.run()
