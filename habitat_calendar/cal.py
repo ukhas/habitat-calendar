@@ -6,7 +6,6 @@ from flask import Flask, Response
 app = Flask(__name__)
 
 def desc_from_payload(payload, config):
-    desc = "{payload}: ".format(**locals())
     pairs = {}
     try:
         pairs.update(config['radio'])
@@ -17,9 +16,9 @@ def desc_from_payload(payload, config):
             pairs.update(config['telemetry'])
     except KeyError:
         pass
-    for k, v in pairs.iteritems():
-        desc += "{k}: {v};".format(**locals())
-    return desc
+    
+    return ("{0}: ".format(payload) + 
+            ", ".join("{0}: {1}".format(k, v) for k, v in pairs.iteritems()))
 
 @app.route("/")
 def calendar():
