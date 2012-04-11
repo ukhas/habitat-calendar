@@ -7,4 +7,5 @@ icalendar==3.0.1b2
 pytz==2012b
 restkit==4.1.2
 socketpool==0.3.0
+uWSGI==1.1.2
 wsgiref==0.1.2
