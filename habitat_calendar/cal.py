@@ -25,7 +25,7 @@ def calendar():
     cal = icalendar.Calendar()
     cal.add('prodid', '-//habhub//NONSGML habitat-calendar//EN')
     cal.add('version', '2.0')
-    cal.add('x-wr-calname', 'Upcoming HAB launches')
+    cal.add('x-wr-calname', 'HAB launches')
 
     db = couchdbkit.Server("http://habitat.habhub.org")['habitat']
     flights = db.view("calendar/flights", stale='update_after')
