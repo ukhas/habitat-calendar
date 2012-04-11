@@ -1,6 +1,7 @@
 import couchdbkit
 import datetime
 import icalendar
+import pytz
 from flask import Flask, Response
 app = Flask(__name__)
 
@@ -45,9 +46,10 @@ def calendar():
         e = icalendar.Event()
         e.add('summary', flight['value']['name'] + " Launch")
         e.add('description', "\n".join(desc))
-        e.add('dtstart', datetime.datetime.fromtimestamp(launchtime))
-        e.add('dtend', datetime.datetime.fromtimestamp(launchtime + 4*3600))
-        e.add('dtstamp', datetime.datetime.utcnow())
+        e.add('dtstart', datetime.datetime.fromtimestamp(launchtime, pytz.utc))
+        e.add('dtend', datetime.datetime.fromtimestamp(launchtime + 4*3600,
+            pytz.utc))
+        e.add('dtstamp', datetime.datetime.now(pytz.utc))
         e['uid'] = str(flight['id'])
         cal.add_component(e)
 
