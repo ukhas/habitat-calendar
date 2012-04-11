@@ -55,4 +55,4 @@ def calendar():
     return Response(cal.to_ical(), mimetype='text/calendar')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
