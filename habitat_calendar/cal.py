@@ -114,7 +114,6 @@ def calendar():
         if 'group' in metadata:
             desc.append("Group: " + metadata['group'])
         desc.append(u"Location: " + location_str)
-        desc.append("")
 
         for already_dealt_with in ['location', 'project', 'group']:
             if already_dealt_with in metadata:
