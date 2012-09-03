@@ -80,23 +80,19 @@ def describe_transmission(transmission):
 
 def desc_from_payload(payload):
     # payload is a payload_configuration doc
-    # produces: CALLSIGN1, C2, C3 on TRANSMISSION1, T2, T3
 
     callsigns = [s['callsign'] for s in payload.get('sentences', [])]
 
     transmissions = payload.get('transmissions', [])
     transmission_strs = map(describe_transmission, transmissions)
 
-    description = u""
+    description = []
 
     if callsigns:
-        description += ', '.join(callsigns)
+        description.append(', '.join(callsigns))
 
-    if callsigns and transmission_strs:
-        description += " on "
-        
     if transmission_strs:
-        description += ', '.join(transmission_strs)
+        description.extend(transmission_strs)
 
     return description
 
@@ -110,28 +106,41 @@ def calendar():
     for flight in load_flights():
         desc = []
 
+        location_str = flight_location(flight)
         metadata = flight.get('metadata', {}).copy()
-        if 'location' in metadata:
-            del metadata['location']
+
+        if 'project' in metadata:
+            desc.append("Project: " + metadata['project'])
+        if 'group' in metadata:
+            desc.append("Group: " + metadata['group'])
+        desc.append(u"Location: " + location_str)
+        desc.append("")
+
+        for already_dealt_with in ['location', 'project', 'group']:
+            if already_dealt_with in metadata:
+                del metadata[already_dealt_with]
 
         if metadata:
+            desc.append("")
             desc.append("Metadata:")
             for key, value in metadata.iteritems():
                 desc.append(u"{key}: {value}".format(**locals()))
 
         if flight['_payload_docs']:
-            if desc:
-                desc.append("")
+            desc.append("")
             desc.append("Payloads:")
             for doc in flight['_payload_docs']:
-                description = desc_from_payload(doc)
-                if description:
-                    desc.append(description)
+                payload_desc = desc_from_payload(doc)
+                if not payload_desc:
+                    continue
+
+                desc.extend(payload_desc)
+                desc.append('')
 
         e = icalendar.Event()
         e.add('summary', flight['name'])
         e.add('description', "\n".join(desc))
-        e.add('location', flight_location(flight))
+        e.add('location', location_str)
         e.add('dtstart', launch_datetime(flight))
         e.add('dtend', launch_datetime(flight, 4*3600))
         e.add('dtstamp', datetime.datetime.now(pytz.utc))
