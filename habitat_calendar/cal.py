@@ -129,7 +129,7 @@ def calendar():
                     desc.append(description)
 
         e = icalendar.Event()
-        e.add('summary', flight['name'] + " Launch")
+        e.add('summary', flight['name'])
         e.add('description', "\n".join(desc))
         e.add('location', flight_location(flight))
         e.add('dtstart', launch_datetime(flight))
@@ -141,4 +141,4 @@ def calendar():
     return Response(cal.to_ical(), mimetype='text/calendar')
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run()
