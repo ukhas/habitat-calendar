@@ -6,7 +6,7 @@ from flask import Flask, Response
 app = Flask(__name__)
 
 def load_flights():
-    db = couchdbkit.Server("http://beta.habitat.habhub.org")['habitat']
+    db = couchdbkit.Server("http://habitat.habhub.org")['habitat']
     view = db.view("flight/launch_time_including_payloads",
                    stale="update_after", include_docs=True)
     flights = []
