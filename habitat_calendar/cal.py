@@ -20,7 +20,7 @@ def load_flights():
 
     # very similar to habitat.uploader.Uploader.flights()
     for row in view:
-        launch_timestamp, is_pcfg = row["key"]
+        launch_timestamp, flight_id, is_pcfg = row["key"]
         doc = row["doc"]
 
         if not is_pcfg:
@@ -28,6 +28,7 @@ def load_flights():
             doc["_launch_timestamp"] = launch_timestamp
             flights.append(doc)
         elif doc is not None:
+            assert flights[-1]["_id"] == flight_id
             flights[-1]["_payload_docs"].append(doc)
 
     return flights
