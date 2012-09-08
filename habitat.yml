@@ -1,0 +1,2 @@
+couch_uri: "http://localhost:5984"
+couch_db: habitat
