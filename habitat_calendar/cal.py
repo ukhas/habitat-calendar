@@ -2,11 +2,18 @@ import couchdbkit
 import datetime
 import icalendar
 import pytz
+from habitat.utils.startup import load_config
 from flask import Flask, Response
 app = Flask(__name__)
 
+# N.B.: Searches working directory since it won't be specified in argv.
+# Configure uwsgi appropriately.
+config = load_config()
+couch_settings = {"couch_uri": config["couch_uri"],
+                  "couch_db": config["couch_db"]}
+
 def load_flights():
-    db = couchdbkit.Server("http://habitat.habhub.org")['habitat']
+    db = couchdbkit.Server(config["couch_uri"])[config["couch_db"]]
     view = db.view("flight/launch_time_including_payloads",
                    stale="update_after", include_docs=True)
     flights = []
