@@ -2,13 +2,14 @@ import couchdbkit
 import datetime
 import icalendar
 import pytz
-from habitat.utils.startup import load_config
+from habitat.utils.startup import load_config, setup_logging
 from flask import Flask, Response
 app = Flask(__name__)
 
 # N.B.: Searches working directory since it won't be specified in argv.
 # Configure uwsgi appropriately.
 config = load_config()
+setup_logging(config, "calendar")
 couch_settings = {"couch_uri": config["couch_uri"],
                   "couch_db": config["couch_db"]}
 
