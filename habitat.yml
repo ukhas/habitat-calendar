@@ -1,2 +1,8 @@
 couch_uri: "http://localhost:5984"
 couch_db: habitat
+log_levels:
+    stderr: NONE
+    file: NONE
+    email: NONE
+calendar:
+    log_file:
