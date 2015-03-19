@@ -111,6 +111,7 @@ def calendar():
     cal.add('prodid', '-//habhub//NONSGML habitat-calendar//EN')
     cal.add('version', '2.0')
     cal.add('x-wr-calname', 'HAB launches')
+    cal.add('x-published-ttl', 'PT1H')
 
     for flight in load_flights():
         desc = []
